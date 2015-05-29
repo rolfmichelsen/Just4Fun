@@ -4,13 +4,13 @@
 # The program reads a file containing GCodes and finds a
 # combination of GCodes that satisfies the puzzle.
 #
+# Usage: puzzle.py [filename]
+#
 # Written by Rolf Michelsen, 2015
 
 import re
+import sys
 
-
-# Name of file containing the list of GCodes to analyze
-gcodefile = 'gcodes.txt'
 
 # List of all gcodes that will be used to find a solution to the puzzle
 # Each list element miust be of type Geocache.
@@ -86,8 +86,12 @@ def solve(startIndex, partialResult, characters, level):
 
 
 def main():
-    print('Reading geocaches from file "{0}".'.format(gcodefile))
-    readGcodes(gcodefile)
+    if len(sys.argv) != 2:
+        print('Missing name of file containing GC-codes to analyse.')
+        return
+
+    print('Reading geocaches from file "{0}".'.format(sys.argv[1]))
+    readGcodes(sys.argv[1])
     print('Got {0} geocaches for analysis.'.format(len(gcodes)))
 
     result = solve(0, [], set(), 0)
