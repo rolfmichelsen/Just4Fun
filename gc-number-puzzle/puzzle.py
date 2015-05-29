@@ -97,7 +97,7 @@ def main():
     result = solve(0, [], set(), 0)
     if result:
         for gc in result:
-            print(gc.name)
+            print('GC{0}'.format(gc.name))
     else:
         print('No solution found')
 
