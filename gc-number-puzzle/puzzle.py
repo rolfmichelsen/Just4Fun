@@ -10,6 +10,7 @@
 
 import re
 import sys
+import time
 
 
 # List of all gcodes that will be used to find a solution to the puzzle
@@ -94,7 +95,10 @@ def main():
     readGcodes(sys.argv[1])
     print('Got {0} geocaches for analysis.'.format(len(gcodes)))
 
+    starttime = time.time()
     result = solve(0, [], set(), 0)
+    solutiontime = time.time() - starttime
+    print('Analysis ran for {0:.0f} seconds.'.format(solutiontime))
     if result:
         for gc in result:
             print('GC{0}'.format(gc.name))
