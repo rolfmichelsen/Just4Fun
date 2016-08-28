@@ -35,7 +35,7 @@ def outputReport(frequency):
 
     freq = sorted(zip(frequency.values(), frequency.keys()), reverse=True)
     for (count, character) in freq:
-        print('{0:2} : {1:>3} {2:>8.2f}% {3}'.format(character, count, count*100.0/charsTotal, '*'*int(count*60/charMax)))
+        print(' {0:2} : {1:>3} {2:>8.2f}% {3}'.format(character, count, count*100.0/charsTotal, '*'*int(count*60/charMax)))
 
 
 
@@ -51,7 +51,8 @@ def getArguments():
     Hint: Use @<filename> to read command line arguments from a file.
     '''
     argParser = ArgumentParser(description=description, epilog=epilog, fromfile_prefix_chars='@')
-    argParser.add_argument('--alpha', dest='alpha', action='store_true', help='Only consider alphabetical characters')
+    argParser.add_argument('--alpha', dest='alpha', action='store_true', help='only consider alphabetical characters')
+    argParser.add_argument('--nocase', dest='nocase', action='store_true', help='ignore character casing')
     argParser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='more verbose output')
     return argParser.parse_args()
 
@@ -62,6 +63,7 @@ def main():
     args = getArguments()
 
     text = sys.stdin.read()
+    if (args.nocase): text = text.lower()
     frequency = frequencyAnalysis(text, alpha=args.alpha)
     outputReport(frequency)
 
