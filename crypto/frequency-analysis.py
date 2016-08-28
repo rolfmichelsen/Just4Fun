@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 
 
 
-def frequencyAnalysis(text, alpha=False):
+def frequencyAnalysis(text, alpha=False, alphabet=None):
     """
     Return a frequency analysis of characters in the input text.  Returns a map where the key is the character
     and the value is the occurrence count in the text.
@@ -18,6 +18,7 @@ def frequencyAnalysis(text, alpha=False):
     frequency = {}
     for ch in text:
         if alpha and not ch.isalpha(): continue
+        if alphabet and not ch in alphabet: continue
         if ch.isspace(): ch = ' '
         f = frequency.get(ch, 0)
         frequency[ch] = f + 1
@@ -52,6 +53,7 @@ def getArguments():
     '''
     argParser = ArgumentParser(description=description, epilog=epilog, fromfile_prefix_chars='@')
     argParser.add_argument('--alpha', dest='alpha', action='store_true', help='only consider alphabetical characters')
+    argParser.add_argument('--alphabet', dest='alphabet', action='store', help='specify characters to include in analysis')
     argParser.add_argument('--nocase', dest='nocase', action='store_true', help='ignore character casing')
     argParser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='more verbose output')
     return argParser.parse_args()
@@ -64,7 +66,7 @@ def main():
 
     text = sys.stdin.read()
     if (args.nocase): text = text.lower()
-    frequency = frequencyAnalysis(text, alpha=args.alpha)
+    frequency = frequencyAnalysis(text, alpha=args.alpha, alphabet=args.alphabet)
     outputReport(frequency)
 
 
