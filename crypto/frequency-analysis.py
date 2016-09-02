@@ -25,6 +25,16 @@ def frequencyAnalysis(text, alpha=False, alphabet=None):
     return frequency
 
 
+def sliceText(text, offset=0, interleave=1):
+    """
+    Return a slice of the input text as defined by the offset and character interleaving.
+    """
+    newtext = ''
+    while offset < len(text):
+        newtext = newtext + text[offset]
+        offset = offset + interleave
+    return newtext
+
 
 def outputReport(frequency):
     """
@@ -56,6 +66,8 @@ def getArguments():
     argParser.add_argument('--alpha', dest='alpha', action='store_true', help='only consider alphabetical characters')
     argParser.add_argument('--alphabet', metavar='STR', dest='alphabet', action='store', help='specify characters to include in analysis')
     argParser.add_argument('--nocase', dest='nocase', action='store_true', help='ignore character casing')
+    argParser.add_argument('--skip', metavar='S', dest='skip', action='store', type=int, default=0, help='skip S characters before starting analysis')
+    argParser.add_argument('--interleave', metavar='I', dest='interleave', action='store', type=int, default=1, help='only consider every Ith character')
     argParser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='more verbose output')
     return argParser.parse_args()
 
@@ -71,6 +83,10 @@ def main():
             text = f.read()
     else:
         text = sys.stdin.read()
+
+    text = sliceText(text, offset=args.skip, interleave=args.interleave)
+
+    if args.verbose: print('Text: {0}'.format(text), file=sys.stderr)
 
     if (args.nocase): text = text.lower()
     frequency = frequencyAnalysis(text, alpha=args.alpha, alphabet=args.alphabet)
