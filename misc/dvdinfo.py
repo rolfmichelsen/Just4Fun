@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+This script will print information from DVD IFO files.  All information about the IFO file format
+is from http://dvd.sourceforge.net/dvdinfo/ifo.html.
+"""
+
 import sys
 from argparse import ArgumentParser
 
@@ -9,7 +14,7 @@ verbose = False
 class VtsIfoFile:
     
     def __init__(self, data):
-        
+            
 
 
 
