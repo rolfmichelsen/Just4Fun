@@ -12,10 +12,13 @@ verbose = False
 
 
 class VtsIfoFile:
-    
-    def __init__(self, data):
-            
 
+    def __init__(self, data):
+        assert type(data) is bytes
+        if not data[0:11] == b'DVDVIDEO-VTS': raise Exception('Invalid file identifier')
+
+        subpictureCnt = int.from_bytes(data[254:255], byteorder='big')
+        print('Number of subpicture streams : {0}'.format(subpictureCount))
 
 
 
@@ -38,6 +41,12 @@ def main():
     args = getArguments()
     verbose = args.verbose
     inputFile = args.file
+
+    with open(inputFile, 'rb') as f:
+        print('Reading file {0}'.format(inputFile))
+        data = f.read()
+        info = VtsIfoFile(data)
+
 
 
 
