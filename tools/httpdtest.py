@@ -1,6 +1,9 @@
 #! /bin/env python3
 #
 # Simple HTTP server for testing purposes.
+#
+# The server handles GET requests by returning a JSON object containing the
+# request string and all request headers.
 
 import http.server
 import json
@@ -11,8 +14,10 @@ from argparse import ArgumentParser
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
 
-    # Handle GET requests
     def do_GET(self):
+        """
+        Handle client GET requests.
+        """
         response = {}
 
         # Capture the URL request
@@ -38,6 +43,8 @@ def getArguments():
 
     description = "Simple HTTP server for testing."
     epilog = '''
+    The server handles GET requests by returning a JSON object containing the request URL and
+    all request header fields.
     '''
     argParser = ArgumentParser(description=description, epilog=epilog, fromfile_prefix_chars='@')
     argParser.add_argument('port', type=int, nargs='?', help='Server port')
@@ -46,6 +53,10 @@ def getArguments():
 
 def main():
     args = getArguments()
+
+    if not args.port:
+        print("ERROR: A server port must be specified with the --port argument.", file=sys.stderr)
+
     port = args.port
 
     print("Starting HTTP server on port {}".format(port))
