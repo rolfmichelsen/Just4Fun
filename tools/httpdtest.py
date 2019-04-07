@@ -3,6 +3,7 @@
 # Simple HTTP server for testing purposes.
 
 import http.server
+import json
 import sys
 from argparse import ArgumentParser
 
@@ -10,16 +11,24 @@ from argparse import ArgumentParser
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
 
+    # Handle GET requests
     def do_GET(self):
-        print(self.requestline)
+        response = {}
+
+        # Capture the URL request
+        response["request"] = self.requestline
+
+        # Capture all header fields
+        headers = {}
         for (key, header) in self.headers.items():
-            print("{} : {}".format(key, header))
-        print("---")
+            headers[key] = header
+        response["headers"] = headers
 
+        # Return the response
         self.send_response(200, "OK")
+        self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(b"Thanks for all the fish...")
-
+        self.wfile.write(json.dumps(response, sort_keys=True, indent=4).encode("utf-8"))
 
 
 def getArguments():
