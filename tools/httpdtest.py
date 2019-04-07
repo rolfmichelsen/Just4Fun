@@ -56,6 +56,7 @@ def main():
 
     if not args.port:
         print("ERROR: A server port must be specified with the --port argument.", file=sys.stderr)
+        return
 
     port = args.port
 
