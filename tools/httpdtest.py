@@ -18,22 +18,50 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         """
         Handle client GET requests.
         """
-        response = {}
+        self.outputResponse(self.captureRequest())
 
-        # Capture the URL request
-        response["request"] = self.requestline
 
-        # Capture all header fields
+    def do_POST(self):
+        """
+        Handle client POST request
+        """
+        self.outputResponse(self.captureRequest())
+
+
+    def captureRequest(self):
+        request = {}
+
+        # Capture the request method and URL
+        request["method"] = self.command
+        request["request"] = self.requestline
+
+        # Capture request headers
         headers = {}
         for (key, header) in self.headers.items():
             headers[key] = header
-        response["headers"] = headers
+        request["headers"] = headers
 
-        # Return the response
-        self.send_response(200, "OK")
+        # Capture request body
+        contentLength = int(request["headers"]["Content-Length"])
+        if contentLength > 0:
+            request["body"] = str(self.rfile.read(contentLength), "utf-8")
+        else:
+            request["body"] = ""
+
+        return request
+
+
+    def outputResponse(self, response):
+        """
+        Output response
+        """
+        self.send_response(200, "OK");
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(response, sort_keys=True, indent=4).encode("utf-8"))
+
+
+
 
 
 def getArguments():
