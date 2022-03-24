@@ -18,14 +18,21 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         """
         Handle client GET requests.
         """
-        self.outputResponse(self.captureRequest())
+        self.handleRequest()
 
 
     def do_POST(self):
         """
         Handle client POST request
         """
-        self.outputResponse(self.captureRequest())
+        self.handleRequest()
+
+
+    def handleRequest(self):
+        request = self.captureRequest()
+        self.logRequest(request)
+        self.outputResponse(request)
+
 
 
     def captureRequest(self):
@@ -60,6 +67,16 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(response, sort_keys=True, indent=4).encode("utf-8"))
 
+
+    def logRequest(self, request):
+        print(request["request"])
+        print("\nHeaders:")
+        headers = request["headers"]
+        for (name, value) in headers.items():
+            print("  {0} : {1}".format(name, value))
+        print("\nBody")
+        print(request["body"])
+        print("----\n")
 
 
 
