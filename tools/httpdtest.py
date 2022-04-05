@@ -69,14 +69,14 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
 
     def logRequest(self, request):
-        print(request["request"])
-        print("\nHeaders:")
+        print(request["request"], file=sys.stderr)
+        print("\nHeaders:", file=sys.stderr)
         headers = request["headers"]
         for (name, value) in headers.items():
-            print("  {0} : {1}".format(name, value))
-        print("\nBody")
-        print(request["body"])
-        print("----\n")
+            print("  {0} : {1}".format(name, value), file=sys.stderr)
+        print("\nBody", file=sys.stderr)
+        print(request["body"], file=sys.stderr)
+        print("----\n", file=sys.stderr)
 
 
 
